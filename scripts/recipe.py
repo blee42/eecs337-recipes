@@ -37,11 +37,16 @@ def fetch_recipe(url):
 		ingredient_name = name_string[0]
 		del name_string[0]
 
-		name_string = name_string.split()
-		tagged_name = nltk.pos_tag(name_string)
+		ingredient_name = ''.join(ingredient_name)
+		ingredient_name = ingredient_name.split()
+		tagged_name = nltk.pos_tag(ingredient_name)
+
+		if len(tagged_name) > 1:
+			if tagged_name[0][1] != 'NNP':
+				name = tagged_name[1][0]
 
 		print
-		print tagged_name
+		print name
 		print
 
 		preparation = []
