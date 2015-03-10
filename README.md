@@ -35,10 +35,12 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
   ```
   $ mkdir data/db
   ```
+
 3. Start MongoDB in a separate shell window.
   ```
   $ mongo --dbpath data/db/
   ```
+
 4. Do whatever else you want to.
 
 ## Inserting / Finding / etc. with MongoDB.
