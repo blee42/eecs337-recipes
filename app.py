@@ -3,17 +3,20 @@
 #----------------------------------------------------------------------------#
 
 from flask import Flask, render_template, request
-# from flask.ext.sqlalchemy import SQLAlchemy
-import logging
+from flask.ext.pymongo import PyMongo
 from logging import Formatter, FileHandler
 from forms import *
+from scripts import kb
 
+import logging
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
 
 app = Flask(__name__)
 app.config.from_object('config')
+mongo = PyMongo(app)
+kb.init_db(mongo.db)
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.

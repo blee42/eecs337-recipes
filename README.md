@@ -28,3 +28,19 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
   ```
 
 5. Navigate to [http://localhost:5000](http://localhost:5000)
+
+## Starting MongoDB
+1. Have MongoDB installed.
+2. Make the `data/db` folder.
+  ```
+  $ mkdir data/db
+  ```
+3. Start MongoDB in a separate shell window.
+  ```
+  $ mongo --dbpath data/db/
+  ```
+4. Do whatever else you want to.
+
+## Inserting / Finding / etc. with MongoDB.
+Just do everything in `kb.py`. Standard Mongo stuff -- `kb.insert_one`, `kb.insert_many`, `kb.find()`, etc. Read the docs.
+
