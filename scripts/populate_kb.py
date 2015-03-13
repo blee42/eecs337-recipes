@@ -40,12 +40,79 @@ def get_ingredients_from_letter_page(letter_soup):
 
     return ingredients
 
+
+converters = {
+    'carbs': [
+        'pasta',
+        'bread',
+        'flour',
+        'cereal',
+        'wheat',
+        'oats',
+        'rice'
+    ]
+    'protein': [
+        'protein',
+        'fish',
+        'chicken',
+        'soy',
+        'nut',
+        'bean',
+        'pork',
+        'beef',
+        'ham'
+    ],
+    'dairy': [
+        'dairy',
+        'milk',
+        'cheese',
+        'cream',
+    ],
+    'other': [
+        'liquer',
+        'liquor',
+        'alcohol',
+        'beer',
+        'condiment',
+        'spice',
+        'herb',
+        'seed',
+        'salt',
+        'additive',
+        'oil',
+    ],
+    'fruit': [
+        'fruit',
+        'berry',
+        'berries',
+        'avocado',
+
+    ],
+    'vegetable': [
+        'vegetable',
+        'root',
+        'leaf',
+        'eggplant',
+        'sprout',
+        'greens'
+
+    ],
+    'ignore': [
+        'recipe terms',
+        'miscellaneous',
+        'technique',
+    ]
+}
+
+
 def get_ingredient_details(ingredient_soup):
     ingredient = {}
 
     ingredient['name'] = ingredient_soup.find('h1').contents[0].contents[0]
     try:
-        taxonomy = ingredient_soup.find(class_='taxa').contents[0].strip('\r\n ')
+        taxonomy = ingredient_soup.find(class_='taxa').contents[0].strip('\r\n ').lower()
+        ingredient['web_taxonomy'] = taxonomy
+        print taxonomy
     except:
         # print ingredient
         pass
@@ -77,7 +144,6 @@ def get_ingredient_details(ingredient_soup):
     ingredient['substitutes'] = substitutes
 
     # do stuff with summary
-    print ingredient
     return ingredient
 
 def get_soup(url):
