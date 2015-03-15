@@ -24,9 +24,9 @@ def insert_fixtures():
                 'name': 'chicken',
                 'type': Type.PROTEIN,
                 'composition': Composition.SOLID,
-                'diet_descriptor': [],
-                'healthy_descriptor': [],
-                'substitutes', [],
+                'diet_descriptor': ['meat'],
+                'healthy_descriptor': [''],
+                'substitutes': [],
                 'cuisine': [], # some long list of cuisine types
             },
             {
@@ -35,9 +35,10 @@ def insert_fixtures():
                 'composition': Composition.SOLID,
                 'diet_descriptor': [],
                 'healthy_descriptor': [],
-                'substitutes', [],
+                'substitutes': [],
                 'cuisine': []
             }
         ]
-        kb.insert_many(examples)
+        kb.insert_many(examples);
+        kb.find();
 
