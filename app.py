@@ -16,7 +16,7 @@ import logging
 app = Flask(__name__)
 app.config.from_object('config')
 mongo = PyMongo(app)
-kb.init_db(mongo.db)
+# kb.init_db(mongo.db)
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
