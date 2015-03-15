@@ -30,7 +30,7 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 5. Navigate to [http://localhost:5000](http://localhost:5000)
 
 ## Starting MongoDB
-1. Have MongoDB installed.
+1. Have MongoDB installed and Flask PyMongo installed via PIP (TODO: add to README).
 2. Make the `data/db` folder.
   ```
   $ mkdir data/db
@@ -43,6 +43,12 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 
 4. Do whatever else you want to.
 
+## Populating the DB initially
+
+`populate_kb.py` contains code for quickly populating the database with some 2000 or so ingredients. The data still needs to be refined, but everyone should scrape the data first and wait for a later script to modify all database entries.
+
+Just run `get_ingredients()` and it should do the right thing. This will take ~20 mins.
+
 ## Inserting / Finding / etc. with MongoDB.
-Just do everything in `kb.py`. Standard Mongo stuff -- `kb.insert_one`, `kb.insert_many`, `kb.find()`, etc. Read the docs.
+Just do everything in `kb.py`. Standard Mongo stuff -- `kb.insert()`, `kb.find()`, etc. Read the docs.
 

@@ -6,7 +6,7 @@ import string
 import bs4
 import urllib2
 
-BASE_URL = 'http://www.gourmetsleuth.com/'
+BASE_URL = u'http://www.gourmetsleuth.com/'
 
 db = MongoClient().app
 kb = db.kb
@@ -47,16 +47,19 @@ def get_ingredients_from_letter(letter_soup, letter):
         print 'Page {0} from Thread {1} completed.'.format(count, letter)
         sys.stdout.flush()
 
+    print 'Thread {0} finished.'.format(letter)
     return all_ingredients
 
 def get_ingredients_from_letter_page(letter_soup):
     ingredients = []
     for sec in letter_soup.find_all(class_='portfolio_dscr'):
-        ext = sec.a.attrs['href'][1:]
-        ingredient_soup = get_soup(BASE_URL + ext)
-        ingredients.append(get_ingredient_details(ingredient_soup))
-
-    kb.insert_many(ingredients) # good spot?
+        try:
+            ext = sec.a.attrs['href'][1:]
+            ingredient_soup = get_soup(BASE_URL + ext)
+            ingredients.append(get_ingredient_details(ingredient_soup))
+        except:
+            print 'Problem!'
+            print ext
 
     return ingredients
 
@@ -124,11 +127,11 @@ converters = {
     ]
 }
 
-
-def get_ingredient_details():
+def get_ingredient_details(ingredient_soup):
     ingredient = {}
-    ingredient_soup=get_soup('http://www.gourmetsleuth.com/' + ext)
     ingredient['name'] = ingredient_soup.find('h1').contents[0].contents[0]
+    # name = ingredient_soup.find('h1').contents[0].contents[0]
+
     try:
         taxonomy = ingredient_soup.find(class_='taxa').contents[0].strip('\r\n ').lower()
         ingredient['web_taxonomy'] = taxonomy
@@ -158,6 +161,11 @@ def get_ingredient_details():
 
             elif 'About' in i.contents[0].contents[0]:
                 summary = i.contents[1].contents[0]
+                while True:
+                    try:
+                        summary = summary.contents[0]
+                    except:
+                        break
         except:
             pass
     ingredient['substitutes'] = substitutes
@@ -190,8 +198,9 @@ def get_ingredient_details():
     if nutrients:
         ingredient['nutrients'] = nutrients
 
+    # print ingredient
 
-
+    kb.insert(ingredient) # good spot?
     return ingredient
 
 def get_soup(url):
