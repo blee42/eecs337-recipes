@@ -125,9 +125,9 @@ converters = {
 }
 
 
-def get_ingredient_details(ingredient_soup):
+def get_ingredient_details():
     ingredient = {}
-
+    ingredient_soup=get_soup('http://www.gourmetsleuth.com/' + ext)
     ingredient['name'] = ingredient_soup.find('h1').contents[0].contents[0]
     try:
         taxonomy = ingredient_soup.find(class_='taxa').contents[0].strip('\r\n ').lower()
