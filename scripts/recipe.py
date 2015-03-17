@@ -7,7 +7,7 @@ url = 'http://allrecipes.com/Recipe/Chef-Johns-Pasta-Primavera/Detail.aspx?evt19
 url_2 = 'http://allrecipes.com/Recipe/Pork-Roast-with-Sauerkraut-and-Kielbasa/Detail.aspx?evt19=1&referringHubId=1202'
 url_3 = ''
 
-cooking_tools = ['spoon', 'cup', 'bowl', 'cutting board', 'knife', 'peeler', 'colander', 'strainer', 'grater', 'can opener', 'saucepan', 'frying pan', 'pan', 'baking dish', 'blender', 'spatula', 'tongs', 'garlic press', 'ladle', 'ricer', 'pot holder', 'rolling pin', 'scissors', 'whisk', 'skillet', 'wok', 'baking sheet', 'casserole dish', 'pot']
+cooking_tools = ['spoon', 'cup', 'bowl', 'cutting board', 'knife', 'peeler', 'colander', 'strainer', 'grater', 'can opener', 'saucepan', 'frying pan', 'pan', 'baking dish', 'blender', 'spatula', 'tongs', 'garlic press', 'ladle', 'ricer', 'pot holder', 'rolling pin', 'scissors', 'whisk', 'skillet', 'wok', 'baking sheet', 'casserole dish', 'pot', 'slow cooker']
 cooking_methods = ['peel', 'grate', 'cut', 'slice', 'sieve', 'knead', 'break', 'boil', 'crack', 'fry', 'scramble', 'stir', 'add', 'bake', 'saute', 'simmer', 'pour', 'chop', 'blend', 'brown', 'carmelise', 'beat', 'dice', 'melt', 'poach', 'toss', 'roast']
 
 def fetch_recipe(url):
@@ -38,6 +38,8 @@ def fetch_recipe(url):
         else:
             name_string = ''
 
+        quantity = ''
+        measurement = ''
         if amount_string:
             # TODO: sometimes something in parentheses messes this up
             amount_string = amount_string.split()
@@ -100,6 +102,8 @@ def fetch_recipe(url):
     instruction_div = soup.find('div', {'class': 'directions'})
     instructions = instruction_div.find_all('li')
     instruction_list = []
+    max_time = 0
+    max_time_method = ''
     for step in instructions:
         step_obj = {}
         step_obj['text'] = step.span.text
@@ -111,14 +115,16 @@ def fetch_recipe(url):
                 step_obj['tools'].append(tool)
                 if tool not in recipe_tools:
                     recipe_tools.append(tool)
+        step_obj['tools'] = ', '.join(step_obj['tools'])
 
         # get cooking methods
         step_obj['methods'] = []
         for method in cooking_methods:
-            if method in step_obj['text']:
+            if method in step_obj['text'].lower():
                 step_obj['methods']. append(method)
                 if method not in recipe_methods:
                     recipe_methods.append(method)
+        step_obj['methods'] = ', '.join(step_obj['methods'])
 
         # get cooking time
         step_obj['time'] = 0
@@ -137,8 +143,15 @@ def fetch_recipe(url):
                 elif instruction_tokens[i-1].isnumeric():
                     step_obj['time'] += int(instruction_tokens[i-1])*60
 
+        # check for max time step
+        if step_obj['time'] > max_time:
+            max_time = step_obj['time']
+            max_time_method = step_obj['methods']
+
 
         instruction_list.append(step_obj)
+
+    primary_method = max_time_method
 
     # print debug
     # print 'RECIPE: ' + recipe_name
@@ -177,7 +190,8 @@ def fetch_recipe(url):
         'ingredients' : ingredients,
         'instructions' : instruction_list,
         'recipe_tools' : recipe_tools,
-        'receipe_methods' : recipe_methods
+        'recipe_methods' : recipe_methods,
+        'primary_method' : primary_method
     }
 
 def time_phrase(phrase):

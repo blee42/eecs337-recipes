@@ -12,6 +12,15 @@
 	<p class="col-lg-4 text-center">Prep Time: {{ context.prep_time }} minutes</p>
 	<p class="col-lg-4 text-center">Cook Time: {{ context.cook_time }} minutes</p>
 	<p class="col-lg-4 text-center">Total Time: {{ context.total_time }} minutes</p>
+
+	<h4 class="text-center"><a data-toggle="collapse" data-target="#tool-list" style="color:#333">Tools Needed</a></h4>
+	<div class="col-lg-12 collapse" id="tool-list">
+		<ul>
+			{% for tool in context.tools %}
+				<li>{{ tool }}</li>
+			{% endfor %}	
+		</ul>
+	</div>
 	
 	<h4 class="text-center">Ingredients</h4>
 	<div class="col-lg-12">
@@ -35,11 +44,35 @@
 	{% endfor %}
 	</div>
 
+	<h4 class="text-center"><a data-toggle="collapse" data-target="#method-list" style="color:#333">Methods</a></h4>
+	<div class="col-lg-12 collapse" id="method-list">
+		<p>Primary Method: {{ context.primary_method }}</p>
+		<p>Additional Methods: </p>
+		<ul>
+		{% for method in context.methods %}
+			<li>{{ method }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+
 	<h4 class="text-center">Instructions</h4>
 	<div class="lg-col-12">
 		<ol>
-		{% for instruct in context.instructions %}
-			<li>{{ instruct.text }}</li>
+		{% for i in range(0, context.instructions|length) %}
+			<li>
+				<a data-toggle="collapse" data-target="#instruct-step{{i}}" style="color:#333">{{ context.instructions[i].text }}</a>
+				<div class="collapse" id="instruct-step{{i}}">
+					{% if context.instructions[i].tools != '' %}
+					<p>Step Tools: {{ context.instructions[i].tools }}</p>
+					{% endif %}
+					{% if context.instructions[i].methods != '' %}
+					<p>Step Methods: {{ context.instructions[i].methods }}</p>
+					{% endif %}
+					{% if context.instructions[i].time != '' %}
+					<p>Step Time: {{ context.instructions[i].time }} minutes</p>
+					{% endif %}
+				</div>
+			</li>
 		{% endfor %}
 		</ol>
 	</div>
@@ -51,6 +84,15 @@
 	<p class="col-lg-4 text-center">Prep Time: {{ context.prep_time }} minutes</p>
 	<p class="col-lg-4 text-center">Cook Time: {{ context.cook_time }} minutes</p>
 	<p class="col-lg-4 text-center">Total Time: {{ context.total_time }} minutes</p>
+
+	<h4 class="text-center"><a data-toggle="collapse" data-target="#tool-list1" style="color:#333">Tools Needed</a></h4>
+	<div class="col-lg-12 collapse" id="tool-list1">
+		<ul>
+			{% for tool in context.tools %}
+				<li>{{ tool }}</li>
+			{% endfor %}	
+		</ul>
+	</div>
 	
 	<h4 class="text-center">Ingredients</h4>
 	<div class="col-lg-12">
@@ -70,11 +112,35 @@
 	{% endfor %}
 	</div>
 
+	<h4 class="text-center"><a data-toggle="collapse" data-target="#method-list1" style="color:#333">Methods</a></h4>
+	<div class="col-lg-12 collapse" id="method-list1">
+		<p>Primary Method: {{ context.primary_method }}</p>
+		<p>Additional Methods: </p>
+		<ul>
+		{% for method in context.methods %}
+			<li>{{ method }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+
 	<h4 class="text-center">Instructions</h4>
 	<div class="lg-col-12">
 		<ol>
-		{% for instruct in context.instructions %}
-			<li>{{ instruct.text }}</li>
+		{% for i in range(0, context.instructions|length) %}
+			<li>
+				<a data-toggle="collapse" data-target="#instruct-step1{{i}}" style="color:#333">{{ context.instructions[i].text }}</a>
+				<div class="collapse" id="instruct-step1{{i}}">
+					{% if context.instructions[i].tools != '' %}
+					<p>Step Tools: {{ context.instructions[i].tools }}</p>
+					{% endif %}
+					{% if context.instructions[i].methods != '' %}
+					<p>Step Methods: {{ context.instructions[i].methods }}</p>
+					{% endif %}
+					{% if context.instructions[i].time != '' %}
+					<p>Step Time: {{ context.instructions[i].time }} minutes</p>
+					{% endif %}
+				</div>
+			</li>
 		{% endfor %}
 		</ol>
 	</div>

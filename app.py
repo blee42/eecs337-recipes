@@ -67,6 +67,9 @@ def recipe_submitted(url, diet):
     context['total_time'] = parsed_recipe['total_time']
     context['ingredients'] = parsed_recipe['ingredients']
     context['instructions'] = parsed_recipe['instructions']
+    context['tools'] = parsed_recipe['recipe_tools']
+    context['methods'] = parsed_recipe['recipe_methods']
+    context['primary_method'] = parsed_recipe['primary_method']
 
     if diet != '':
         transformed_recipe = transforms.transform_to_diet(parsed_recipe, diet)
