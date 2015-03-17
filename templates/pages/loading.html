@@ -1,0 +1,15 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Loading...{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Loading...</h1>
+</div>
+<p class="lead">
+  The knowledge base is still being populated...please wait. 
+  <br/>You will need to refresh the page once it reloads. <br/><br/>
+
+  Progress so far: {{context.loaded}} of 2043 entries loaded.
+</p>
+
+{% endblock %}

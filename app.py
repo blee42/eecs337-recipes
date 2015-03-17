@@ -17,10 +17,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 mongo = PyMongo(app)
 
-# kb.init_db(mongo.db)
-#db = SQLAlchemy(app)
-
-# print kb.count();
+def kb_ready():
+    if mongo.db.kb.count() >= 2043:
+        return True
+    else:
+        return False
 
 #----------------------------------------------------------------------------#
 # Controllers.
@@ -29,8 +30,12 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def home():
-    print mongo.db.kb.count()
-    return render_template('pages/placeholder.home.html')
+    if kb_ready():
+        return render_template('pages/placeholder.home.html')
+    else:
+        context = {}
+        context['loaded'] = mongo.db.kb.count()
+        return render_template('pages/loading.html', context=context)
 
 
 @app.route('/about')
@@ -67,6 +72,10 @@ def internal_error(error):
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
+
+@app.before_first_request
+def before_first_request():
+    populate_kb.run_async()
 
 if not app.debug:
     file_handler = FileHandler('error.log')

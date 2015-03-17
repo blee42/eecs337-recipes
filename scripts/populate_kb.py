@@ -21,21 +21,27 @@ def run_async():
         thread.daemon = True
         thread.start()
     else:
-        return
+        refine_kb_entries()
+    return
 
 def run():
     kb.remove({})
     print 'Initializing knowledge base...please wait.'
     print ''
     threads = get_ingredients()
-    counter_thread = Thread(target=async_count_print)
-    counter_thread.start()
+
+    if __name__ == 'main':
+        counter_thread = Thread(target=async_count_print)
+        counter_thread.start()
+
     for thread in threads:
         thread.join()
 
     refine_kb_entries()
 
+    print '\r{0} of {0} knowledge base entries loaded.'.format(KB_SIZE)
     print 'Knowledge base fully initialized.'
+    return
 
 def async_count_print():
     while (kb.count() < KB_SIZE):
@@ -147,7 +153,7 @@ def get_ingredient_details(ingredient_soup):
         amount = [macro.contents[1].contents[0].strip()]
         if macro != macros[0]:
             amount.append(macro.find_next(class_='right_light_label').contents[1].contents[0].strip())
-        nutrients[nutrient] = amount
+        nutrients[nutrient.lower()] = amount
 
     others = ingredient_soup.find_all(class_='left_light_label')
     for other in others:
@@ -155,7 +161,7 @@ def get_ingredient_details(ingredient_soup):
             nutrient = other.contents[0].strip()
             amount = [other.contents[1].contents[0].strip()]
             amount.append(other.find_next(class_='right_light_label').contents[1].contents[0].strip())
-        nutrients[nutrient] = amount
+        nutrients[nutrient.lower()] = amount
 
     minerals = ingredient_soup.find_all(class_='left_col') + ingredient_soup.find_all(class_='right_col')
     for mineral in minerals:
