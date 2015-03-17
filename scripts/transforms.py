@@ -122,68 +122,37 @@ def find_best_diet_replacement(kb_ingredient, diet, replacement_ingredients):
     return kb.find_one({'name': {'$nin': replacement_ingredients}, \
         'type': kb_ingredient['type'], 'diet_descriptor': diet, 'composition': kb_ingredient['composition']})
 
-## IN PROGRESS
-# direction: up, down
-# NUTRIENT = ''
-# def transform_healthiness(recipe, nutrient, direction):
-#     global NUTRIENT
-#     NUTRIENT = nutrient
-#     replacement_ingredients = []
+# pretty identical to above
+def transform_healthiness(recipe, healthy):
+    replacement_ingredients = []
+    for ingredient in recipe['ingredients']:
+        kb_ingredient = fuzzy_search_for_ingredient(ingredient['name'].lower())
+        if kb_ingredient and not kb_ingredient['healthy_descriptor'] is None:
+            if healthy in kb_ingredient['healthy_descriptor']:
+                replacement_ingredients.append(ingredient['name'])
+            else:
+                added = False
+                for substitute in kb_ingredient['substitutes']:
+                    sub_item = fuzzy_search_for_ingredient(substitute)
+                    if sub_item and healthy in sub_item['healthy_descriptor']:
+                        replacement_ingredients.append(sub_item['name'])
+                        added = True
+                        break
 
-#     if direction == 'up':
-#         direct = True
-#     elif direction == 'down':
-#         direct = False
-#     else
-#         return
+                if not added:
+                    rand_ingredient = find_best_healthy_replacement(kb_ingredient, healthy, replacement_ingredients)
+                    replacement_ingredients.append(rand_ingredient['name'])
+                    added = True
+        else:
+            replacement_ingredients.append(ingredient['name'])
 
-#     for ingredient in recipe['ingredients']:
-#         kb_ingredient = fuzzy_search_for_ingredient(ingredient)
+    return replacement_ingredients
 
-#         if kb_ingredient:
-#             substitutes = [fuzzy_search_for_ingredient[sub] for sub in kb_ingredient['substitutes']]
-#             if substitutes:
-#                 substitutes.sort(key=nutrient_key, reverse=direct)
-#                 if substitutes[0]['nutrients'][nutrient][0] != -1:
-#                     replacement_ingredients.a
-
-
-
-#             if diet in kb_ingredient['diet_descriptor']:
-#                 replacement_ingredients.append(kb_ingredient['name'])
-#             else:
-#                 print 'Replacing ' + ingredient + ': '
-#                 print 'Details: '
-#                 print kb_ingredient
-#                 print
-#                 added = False
-#                 for substitute in kb_ingredient['substitutes']:
-#                     sub_item = fuzzy_search_for_ingredient(substitute)
-#                     if sub_item and diet in sub_item['diet_descriptor']:
-#                         print 'Found substitute: '
-#                         print substitute
-#                         print sub_item
-#                         print
-#                         replacement_ingredients.append(sub_item['name'])
-#                         added = True
-#                         break
-
-#                 if not added:
-#                     print 'Could not find substitute.'
-#                     rand_ingredient = find_best_rand_replacement(kb_ingredient, diet)
-#                     replacement_ingredients.append(rand_ingredient['name'])
-#                     print rand_ingredient
-#                     added = True
-#         else:
-#             replacement_ingredients.append(ingredient)
-
-#     return replacement_ingredients
-
-# def nutrient_key(ingredient):
-#     if ingredient['nutrients']:
-#         return ingredient['nutrients'][NUTRIENT][0]
-#     else:
-#         return -1
+def find_best_healthy_replacement(kb_ingredient, healthy, replacement_ingredients):
+    # options = kb.find({'type': kb_ingredient['type'], 'diet_descriptor': diet, 'composition': kb_ingredient['composition']})
+    # for i in options:
+    return kb.find_one({'name': {'$nin': replacement_ingredients}, \
+        'type': kb_ingredient['type'], 'healthy_descriptor': healthy, 'composition': kb_ingredient['composition']})
 
 ## DISCARDING?
 

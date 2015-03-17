@@ -41,7 +41,7 @@ def home():
 def home_post():
     recipe_url = request.form['recipe_url']
     diet_transform = request.form['diet_transform']
-    # health_transform = request.form['health_transform']
+    health_transform = request.form['health_transform']
     # cuisine_transform = request.form['cuisine_transform']
     if diet_transform == '0':
         # pescatarian
@@ -55,15 +55,15 @@ def home_post():
     elif diet_transform == '3':
         # lactose-free
         return recipe_submitted(recipe_url, 'lactose-free')
-    # elif health_transform == '0':
-    #     # low calorie
-    #     return recipe_submitted(recipe_url, '', 'low_calorie', '')
-    # elif health_transform == '1':
-    #     # low fat
-    #     return recipe_submitted(recipe_url, '', 'low_fat', '')
-    # elif health_transform == '2':
-    #     # low sodium
-    #     return recipe_submitted(recipe_url, '', 'low_sodium', '')
+    elif health_transform == '0':
+        # low calorie
+        return recipe_submitted(recipe_url, '', 'low-calorie', '')
+    elif health_transform == '1':
+        # low fat
+        return recipe_submitted(recipe_url, '', 'low-fat', '')
+    elif health_transform == '2':
+        # low sodium
+        return recipe_submitted(recipe_url, '', 'low-sodium', '')
     # elif health_transform == '3':
     #     # low carb
     #     return recipe_submitted(recipe_url, '', 'low_carb', '')
@@ -77,7 +77,7 @@ def home_post():
         return recipe_submitted(recipe_url, '')
 
 @app.route('/recipe_submitted', methods=['POST'])
-def recipe_submitted(url, diet):
+def recipe_submitted(url, diet, health):
     context = {}
     parsed_recipe = recipe.fetch_recipe(url)
     context['recipe_name'] = parsed_recipe['recipe_name']
@@ -95,8 +95,9 @@ def recipe_submitted(url, diet):
         transformed_recipe = transforms.transform_to_diet(parsed_recipe, diet)
         context['transformed_recipe'] = transformed_recipe
         context['transformation'] = diet
-    # if health != '':
-    #     context['transformation'] = health
+    if health != '':
+        context['transformed_recipe'] = transforms.transform_to_healthy(parsed_recipe, diet)
+        context['transformation'] = health
     # if cuisine != '':
     #     context['transformation'] = cuisine
     else:

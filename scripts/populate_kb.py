@@ -242,8 +242,14 @@ def get_diet_descriptors(ingredient):
     return
 
 def get_healthy_descriptors(ingredient):
-
-    return
+    if 'nutrients' in ingredient:
+        descriptors = []
+        for descriptor, check in healthy_converter.iteritems():
+            if check(ingredient['nutrients']):
+                descriptors.append(descriptor)
+        return descriptors
+    else:
+        return ['low-sodium', 'low-fat', 'low-calorie']
 
 def fix_substitutes(sub_string):
     new_string = re.sub('\(.*\)', '', sub_string)
@@ -448,4 +454,11 @@ diet_converter = {
     'lactose-free': [
         'generic-place-holder-here'
     ]
+}
+
+healthy_converter = {
+    'low-sodium': lambda x: (float(x['sodium'][1].strip('%')) < 10),
+    'low-fat': lambda x: (float(x['saturated fat'][1].strip('%')) < 5 and \
+        float(x['total fat'][1].strip('%')) < 10),
+    'low-calorie': lambda x:(float(x['calories'][0]) < 400)
 }
