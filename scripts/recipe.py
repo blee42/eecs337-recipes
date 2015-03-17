@@ -16,7 +16,6 @@ def fetch_recipe(url):
 
     # get name of recipe
     recipe_name = soup.find(id='itemTitle').string
-    print 'RECIPE: ' + recipe_name
 
     recipe_tools = []
     recipe_methods = []
@@ -25,12 +24,6 @@ def fetch_recipe(url):
     prep_time = soup.find(id='prepMinsSpan').next.string
     cook_time = soup.find(id='cookMinsSpan').next.string
     total_time = soup.find(id='totalMinsSpan').next.string
-
-    print
-    print 'PREP TIME: ' + prep_time
-    print 'COOK TIME: ' + cook_time
-    print 'TOTAL TIME: ' + total_time
-    print
 
     # get ingredients
     ingredients = []
@@ -135,26 +128,43 @@ def fetch_recipe(url):
         instruction_list.append(step_obj)
 
     # print debug
-    print 'INGREDIENTS'
-    for ingr in ingredients:
-        print ingr['name']
-        print ingr['descriptor']
-        print ingr['quantity']
-        print ingr['measurement']
-        print ingr['preparation']
-        print
-    print 'INSTRUCTIONS'
-    for instruct in instruction_list:
-        print instruct['text']
-        print instruct['tools']
-        print instruct['methods']
-        print str(instruct['time']) + ' minutes'
-        print
+    # print 'RECIPE: ' + recipe_name
+    # print
+    # print 'PREP TIME: ' + prep_time
+    # print 'COOK TIME: ' + cook_time
+    # print 'TOTAL TIME: ' + total_time
+    # print
+    # print 'INGREDIENTS'
+    # for ingr in ingredients:
+    #     print ingr['name']
+    #     print ingr['descriptor']
+    #     print ingr['quantity']
+    #     print ingr['measurement']
+    #     print ingr['preparation']
+    #     print
+    # print 'INSTRUCTIONS'
+    # for instruct in instruction_list:
+    #     print instruct['text']
+    #     print instruct['tools']
+    #     print instruct['methods']
+    #     print str(instruct['time']) + ' minutes'
+    #     print
 
-    print 'RECIPE TOOLS: '
-    print recipe_tools
-    print 'RECIPE METHODS: '
-    print recipe_methods
+    # print 'RECIPE TOOLS: '
+    # print recipe_tools
+    # print 'RECIPE METHODS: '
+    # print recipe_methods
+
+    return {
+        'recipe_name' : recipe_name,
+        'prep_time' : prep_time,
+        'cook_time' : cook_time,
+        'total_time' : total_time,
+        'ingredients' : ingredients,
+        'instructions' : instruction_list,
+        'recipe_tools' : recipe_tools,
+        'receipe_methods' : recipe_methods
+    }
 
 def time_phrase(phrase):
     if 'couple' in phrase:
@@ -164,6 +174,4 @@ def time_phrase(phrase):
     elif 'several' in phrase:
         return 8
     else:
-        return False
-
-fetch_recipe(url_3)   
+        return False   
