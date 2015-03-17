@@ -140,3 +140,7 @@ example data:
 ## Inserting / Finding / etc. with MongoDB.
 Just do everything in `kb.py`. Standard Mongo stuff -- `kb.insert()`, `kb.find()`, etc. Read the docs.
 
+## todo
+ * plural words
+ * two transformations
+

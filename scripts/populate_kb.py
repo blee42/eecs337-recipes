@@ -293,6 +293,7 @@ type_converters = {
         'meat',
         'poultry',
         'tofu',
+        'sausage'
     ],
     'dairy': [
         'dairy',
@@ -412,10 +413,13 @@ composition_converters = {
 # eliminate if these are here
 diet_converter = {
     'pescatarian': [
+        'chicken',
+        'poultry',
         'red meat'
         'pork',
         'beef',
         'ham',
+        'steak'
     ],
     'vegetarian': [
         'fish',
@@ -445,6 +449,3 @@ diet_converter = {
         'generic-place-holder-here'
     ]
 }
-# diet_descriptor = {
-#     ''
-# }
