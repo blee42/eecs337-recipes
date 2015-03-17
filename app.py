@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 from flask.ext.pymongo import PyMongo
 from logging import Formatter, FileHandler
 from forms import *
-from scripts import kb
+from scripts import kb, populate_kb
 
 import logging
 #----------------------------------------------------------------------------#
@@ -16,28 +16,12 @@ import logging
 app = Flask(__name__)
 app.config.from_object('config')
 mongo = PyMongo(app)
+
 # kb.init_db(mongo.db)
 #db = SQLAlchemy(app)
 
-# Automatically tear down SQLAlchemy.
-'''
-@app.teardown_request
-def shutdown_session(exception=None):
-    db_session.remove()
-'''
+# print kb.count();
 
-# Login required decorator.
-'''
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
-'''
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
@@ -45,6 +29,7 @@ def login_required(test):
 
 @app.route('/')
 def home():
+    print mongo.db.kb.count()
     return render_template('pages/placeholder.home.html')
 
 

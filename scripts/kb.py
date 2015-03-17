@@ -11,11 +11,20 @@ class Type(Enum):
     CARB = 3
     DAIRY = 4
     OTHER = 5
+    IGNORE = 6
 
 class Composition(Enum):
     SOLID = 0
     LIQUID = 1
     POWDER = 2
+
+class Diet(Enum):
+    VEGAN = 0
+    VEGETARIAN = 1
+    PESCATARIAN = 2
+    LACTOSEFREE = 3
+    NONE = 99
+
 #assuming diet-descriptor contains non-veg, vegan, vegetarian, Pescatarian
 def insert_fixtures():
     if kb.count() == 0:
