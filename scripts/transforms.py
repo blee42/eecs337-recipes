@@ -35,6 +35,7 @@ example_recipe = {
         'chicken',
         'butter',
         'flour',
+        'olive oil',
         'white sugar',
         'baking powder',
         'salt',
@@ -55,6 +56,9 @@ def fuzzy_search_for_ingredient(name):
 
     words = name.strip('.,()').split(' ')
     for word in reversed(words): #if any predecessors, usually adjectives
+        attempt = kb.find_one({'name': word})
+        if attempt:
+            return attempt
         attempt = kb.find_one({'name': {'$regex': r'\b' + word + r'\b'}})
         if attempt:
             return attempt
@@ -64,7 +68,9 @@ def fuzzy_search_for_ingredient(name):
 def transform_to_diet(recipe, diet):
     replacement_ingredients = []
     for ingredient in recipe['ingredients']:
-        kb_ingredient = fuzzy_search_for_ingredient(ingredient['name'])
+        print ingredient['name']
+        kb_ingredient = fuzzy_search_for_ingredient(ingredient['name'].lower())
+        print kb_ingredient
         if kb_ingredient and not kb_ingredient['diet_descriptor'] is None:
             if diet in kb_ingredient['diet_descriptor']:
                 replacement_ingredients.append(kb_ingredient['name'])
@@ -90,6 +96,7 @@ def transform_to_diet(recipe, diet):
                     rand_ingredient = find_best_diet_replacement(kb_ingredient, diet)
                     replacement_ingredients.append(rand_ingredient['name'])
                     print rand_ingredient
+                    print
                     added = True
         else:
             replacement_ingredients.append(ingredient['name'])
