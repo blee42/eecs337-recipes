@@ -8,6 +8,7 @@ import string
 import bs4
 import urllib2
 import operator
+import re
 
 BASE_URL = u'http://www.gourmetsleuth.com/'
 KB_SIZE = 2043
@@ -30,7 +31,7 @@ def run():
     print ''
     threads = get_ingredients()
 
-    if __name__ == 'main':
+    if __name__ == '__main__':
         counter_thread = Thread(target=async_count_print)
         counter_thread.start()
 
@@ -72,14 +73,14 @@ def get_ingredients_from_letter(letter_soup, letter):
 
     pages = letter_soup.find_all(class_='sf_pagerNumeric')[0].find_all('a')
     # print 'Page 1 from Thread {0} completed.'.format(letter)
-    sys.stdout.flush()
-    count = 1
+    # sys.stdout.flush()
+    # count = 1
     for i in pages[1:]: # first item is duplicate
         ext = i.attrs['href'][1:] # skip first /
         page_soup = get_soup(BASE_URL + ext)
         all_ingredients += get_ingredients_from_letter_page(page_soup)
 
-        count += 1
+        # count += 1
         # print 'Page {0} from Thread {1} completed.'.format(count, letter)
         sys.stdout.flush()
 
@@ -113,24 +114,12 @@ def get_ingredient_details(ingredient_soup):
         pass
 
     details = ingredient_soup.find_all(class_='ingredient-summary')
-    substitutes = []
+    substitutes = ''
     summary = ''
     for i in details:
         try:
             if 'Substitute' in i.contents[0].contents[0]:
-                subs = i.contents[1].contents[0].lower()
-                if (',' in subs) and (' or' in subs):
-                    subs.strip(',')
-                    subs = subs.split(' or')
-                elif (',') in subs:
-                    subs = subs.split(',')
-                elif ' or' in subs:
-                    subs = subs.split(' or')
-                else:
-                    subs = [subs]
-
-                for j in subs:
-                    substitutes.append(j.strip().lower())
+                substitutes = i.contents[1].contents[0].lower()
 
             elif 'About' in i.contents[0].contents[0]:
                 summary = i.contents[1].contents[0]
@@ -141,7 +130,7 @@ def get_ingredient_details(ingredient_soup):
                         break
         except:
             pass
-    ingredient['substitutes'] = substitutes
+    ingredient['substring'] = substitutes
     ingredient['summary'] = summary.lower()
 
     # do stuff with summary
@@ -188,6 +177,8 @@ def refine_kb_entries():
         ingredient['composition'] = get_composition(ingredient)
         ingredient['diet_descriptor'] = get_diet_descriptors(ingredient)
         ingredient['healthy_descriptor'] = get_healthy_descriptors(ingredient)
+
+        ingredient['substitutes'] = fix_substitutes(ingredient['substring'])
         kb.save(ingredient)
 
 def get_type(ingredient):
@@ -254,6 +245,17 @@ def get_healthy_descriptors(ingredient):
 
     return
 
+def fix_substitutes(sub_string):
+    new_string = re.sub('\(.*\)', '', sub_string)
+    sub_array = re.split(',| or | and ', new_string)
+
+    ret_res = []
+    for i in sub_array:
+        if i.strip() != '' and \
+        'cooking' not in i:
+            ret_res.append(i)
+
+    return ret_res
 
 #### Converters ####
 
@@ -437,6 +439,7 @@ diet_converter = {
         'meat',
         'poultry',
         'animal fat',
+        'butter',
     ],
     'lactose-free': [
         'generic-place-holder-here'

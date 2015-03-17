@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 from flask.ext.pymongo import PyMongo
 from logging import Formatter, FileHandler
 from forms import *
-from scripts import kb, populate_kb
+from scripts import transforms, populate_kb, recipe
 
 import logging
 #----------------------------------------------------------------------------#
@@ -41,24 +41,6 @@ def home():
 @app.route('/about')
 def about():
     return render_template('pages/placeholder.about.html')
-
-
-@app.route('/login')
-def login():
-    form = LoginForm(request.form)
-    return render_template('forms/login.html', form=form)
-
-
-@app.route('/register')
-def register():
-    form = RegisterForm(request.form)
-    return render_template('forms/register.html', form=form)
-
-
-@app.route('/forgot')
-def forgot():
-    form = ForgotForm(request.form)
-    return render_template('forms/forgot.html', form=form)
 
 # Error handlers.
 
