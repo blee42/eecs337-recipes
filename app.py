@@ -39,16 +39,41 @@ def home():
 
 @app.route('/', methods=['POST'])
 def home_post():
-    context = {}
     recipe_url = request.form['recipe_url']
-    parsed_recipe = recipe.fetch_recipe(recipe_url)
+    diet_transform = request.form['diet_transform']
+    if diet_transform == '0':
+        # pescatarian
+        return recipe_submitted(recipe_url, 'pescatarian')
+    elif diet_transform == '1':
+        # vegetarian
+        return recipe_submitted(recipe_url, 'vegetarian')
+    elif diet_transform == '2':
+        # vegan
+        return recipe_submitted(recipe_url, 'vegan')
+    elif diet_transform == '3':
+        # lactose-free
+        return recipe_submitted(recipe_url, 'lactose-free')
+    else:
+        return recipe_submitted(recipe_url, '')
+
+@app.route('/recipe_submitted', methods=['POST'])
+def recipe_submitted(url, diet):
+    context = {}
+    parsed_recipe = recipe.fetch_recipe(url)
     context['recipe_name'] = parsed_recipe['recipe_name']
-    context['recipe_url'] = recipe_url
+    context['recipe_url'] = url
     context['prep_time'] = parsed_recipe['prep_time']
     context['cook_time'] = parsed_recipe['cook_time']
     context['total_time'] = parsed_recipe['total_time']
     context['ingredients'] = parsed_recipe['ingredients']
     context['instructions'] = parsed_recipe['instructions']
+
+    if diet != '':
+        transformed_recipe = transforms.transform_to_diet(parsed_recipe, diet)
+        context['transformed_recipe'] = transformed_recipe
+        context['diet'] = diet
+    else:
+        context['transformed_recipe'] = "Not available"
     return render_template('pages/recipe_submitted.html', context=context)
 
 @app.route('/about')

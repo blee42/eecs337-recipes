@@ -178,7 +178,7 @@ def refine_kb_entries():
         ingredient['diet_descriptor'] = get_diet_descriptors(ingredient)
         ingredient['healthy_descriptor'] = get_healthy_descriptors(ingredient)
 
-        # ingredient['substitutes'] = fix_substitutes(ingredient['substring'])
+        ingredient['substitutes'] = fix_substitutes(ingredient['substring'])
         kb.save(ingredient)
 
 def get_type(ingredient):

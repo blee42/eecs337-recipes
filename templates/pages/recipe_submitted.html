@@ -46,7 +46,38 @@
 
 </div>
 <div class="row col-lg-6">
-	<h3 class="text-center">Transformation Options</h3>
+	<h3 class="text-center">Transformed Recipe</h3>
+	<h4 class="text-center">{{ context.recipe_name }} - {{ context.diet }}</h4>
+	<p class="col-lg-4 text-center">Prep Time: {{ context.prep_time }} minutes</p>
+	<p class="col-lg-4 text-center">Cook Time: {{ context.cook_time }} minutes</p>
+	<p class="col-lg-4 text-center">Total Time: {{ context.total_time }} minutes</p>
+	
+	<h4 class="text-center">Ingredients</h4>
+	<div class="col-lg-12">
+	{% for i in range(0, context.ingredients|length) %}
+		{% if context.ingredients[i].preparation != '' and context.ingredients[i].prep_descriptor != '' %}
+		<p>{{ context.transformed_recipe[i] }} - {{ context.ingredients[i].quantity }} {{ context.ingredients[i].measurement }} ({{ context.ingredients[i].prep_descriptor }} {{ context.ingredients[i].preparation }})
+		</p>
+		{% elif context.ingredients[i].preparation != '' %}
+		<p>{{ context.transformed_recipe[i] }} - {{ context.ingredients[i].quantity }} {{ context.ingredients[i].measurement }} ({{ context.ingredients[i].preparation }})</p>
+		{% elif context.ingredients[i].preparation != '' and context.ingredients[i].prep_descriptor != '' %}
+		<p>{{ context.transformed_recipe[i] }} - {{ context.ingredients[i].quantity }} {{ context.ingredients[i].measurement }} ({{ context.ingredients[i].prep_descriptor }} {{ context.ingredients[i].preparation }})
+		</p>
+		{% else %}
+		<p>{{ context.transformed_recipe[i] }} - {{ context.ingredients[i].quantity }} {{ context.ingredients[i].measurement }}
+		</p>
+		{% endif %}
+	{% endfor %}
+	</div>
+
+	<h4 class="text-center">Instructions</h4>
+	<div class="lg-col-12">
+		<ol>
+		{% for instruct in context.instructions %}
+			<li>{{ instruct.text }}</li>
+		{% endfor %}
+		</ol>
+	</div>
 </div>
 
 {% endblock %}

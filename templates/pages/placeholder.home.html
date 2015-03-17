@@ -5,7 +5,15 @@
 <div class="row">
 	<h1>Recipe Transformer</h1>
 	<form action="." method="POST">
+		<h3>Convert</h3>
 		<input type="text" class="form-control" name="recipe_url" placeholder="Submit Recipe Url">
+
+		<h3>To</h3>
+		<input type="radio" name="diet_transform" value="0"> Pescatarian <br>
+		<input type="radio" name="diet_transform" value="1"> Vegetarian <br>
+		<input type="radio" name="diet_transform" value="2"> Vegan <br>
+		<input type="radio" name="diet_transform" value="3"> Lactose Free <br>
+
 		<input type="submit" class="btn btn-default pull-right" name="home" value="Submit">
 	</form>
 </div>

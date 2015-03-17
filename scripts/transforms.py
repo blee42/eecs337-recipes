@@ -64,12 +64,12 @@ def fuzzy_search_for_ingredient(name):
 def transform_to_diet(recipe, diet):
     replacement_ingredients = []
     for ingredient in recipe['ingredients']:
-        kb_ingredient = fuzzy_search_for_ingredient(ingredient)
-        if kb_ingredient:
+        kb_ingredient = fuzzy_search_for_ingredient(ingredient['name'])
+        if kb_ingredient and not kb_ingredient['diet_descriptor'] is None:
             if diet in kb_ingredient['diet_descriptor']:
                 replacement_ingredients.append(kb_ingredient['name'])
             else:
-                print 'Replacing ' + ingredient + ': '
+                print 'Replacing ' + ingredient['name'] + ': '
                 print 'Details: '
                 print kb_ingredient
                 print
@@ -92,7 +92,7 @@ def transform_to_diet(recipe, diet):
                     print rand_ingredient
                     added = True
         else:
-            replacement_ingredients.append(ingredient)
+            replacement_ingredients.append(ingredient['name'])
 
     return replacement_ingredients
 
