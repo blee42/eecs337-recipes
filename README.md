@@ -6,26 +6,26 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 
 ## Quick Start
 1. Clone the repo
-  ```
+  ```shell
   $ git clone git@github.com:blee42/eecs337.git
   $ cd flask-boilerplate
   ```
 
 2. Make a virtual environment.  We are using the virtualenvwrapper; if you have not used it before the installation docs can be seen [http://virtualenvwrapper.readthedocs.org/en/latest/install.html](here).
-  ```
+  ```shell
   $ mkvirtualenv env
   $ workon env
   ```
 
 3. Install the dependencies:
-  ```
+  ```shell
   $ pip install -r requirements.txt
   ```
 
 4. Install MongoDB
 
 4. Run the development server:
-  ```
+  ```shell
   $ python app.py
   ```
 
@@ -34,12 +34,12 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 ## Starting MongoDB
 1. Have MongoDB installed and Flask PyMongo installed via PIP (TODO: add to README).
 2. Make the `data/db` folder.
-  ```
+  ```shell
   $ mkdir data/db
   ```
 
 3. Start MongoDB in a separate shell window.
-  ```
+  ```shell
   $ mongo --dbpath data/db/
   ```
 
@@ -51,7 +51,7 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 Just run `run()` and it should do the right thing. This will take ~10 mins. Running the Flask server itself will have a similar effect, in addition to checks that rerun specific bits as necessary.
 
 example data:
-```
+```JSON
 {
   "_id" : ObjectId("5507cca29547e66a6a1bb445"),
   "name" : "abiu",
