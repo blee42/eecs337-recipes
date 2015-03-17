@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 url = 'http://allrecipes.com/Recipe/Chef-Johns-Pasta-Primavera/Detail.aspx?evt19=1&referringHubId=95'
 url_2 = 'http://allrecipes.com/Recipe/Pork-Roast-with-Sauerkraut-and-Kielbasa/Detail.aspx?evt19=1&referringHubId=1202'
-url_3 = 'http://allrecipes.com/Recipe/Moms-Irish-Soda-Bread/Detail.aspx?evt19=1&referringHubId=1'
+url_3 = ''
 
 cooking_tools = ['spoon', 'cup', 'bowl', 'cutting board', 'knife', 'peeler', 'colander', 'strainer', 'grater', 'can opener', 'saucepan', 'frying pan', 'pan', 'baking dish', 'blender', 'spatula', 'tongs', 'garlic press', 'ladle', 'ricer', 'pot holder', 'rolling pin', 'scissors', 'whisk', 'skillet', 'wok', 'baking sheet', 'casserole dish', 'pot']
 cooking_methods = ['peel', 'grate', 'cut', 'slice', 'sieve', 'knead', 'break', 'boil', 'crack', 'fry', 'scramble', 'stir', 'add', 'bake', 'saute', 'simmer', 'pour', 'chop', 'blend', 'brown', 'carmelise', 'beat', 'dice', 'melt', 'poach', 'toss', 'roast']
@@ -31,7 +31,6 @@ def fetch_recipe(url):
     for ingredient in ingredient_list:
         if ingredient.find(id='lblIngAmount'):
             amount_string = ingredient.find(id='lblIngAmount').string
-            print amount_string
         else:
             amount_string = ''
         if ingredient.find(id='lblIngName'):
@@ -44,7 +43,10 @@ def fetch_recipe(url):
             amount_string = amount_string.split()
             if len(amount_string) > 1:
                 quantity = amount_string[0]
-                measurement = amount_string[1]
+                if amount_string[1].startswith('('):
+                    measurement = ''
+                else:
+                    measurement = amount_string[1]
             else:
                 quantity = amount_string[0]
                 measurement = ''
@@ -58,6 +60,8 @@ def fetch_recipe(url):
         tagged_name = nltk.pos_tag(ingredient_name)
 
         descriptor = ''
+        preparation = ''
+        prep_descriptor = ''
         if len(tagged_name) > 1:
             if tagged_name[0][1] == 'VBD' or tagged_name[0][1] == 'JJ':
                 descriptor = ingredient_name[0]
@@ -68,11 +72,19 @@ def fetch_recipe(url):
         else:
             name_ingr = ingredient_name[0]
 
-        preparation = []
+        if descriptor.endswith('ed'):
+            preparation = descriptor
+            descriptor = ''
+
+        name_string = ''.join(name_string)
+        name_string = name_string.split()
         if len(name_string) > 0:
             for phrase in name_string:
-                preparation.append(phrase)
-        preparation = ''.join(preparation)
+                if phrase.endswith('ly'):
+                    prep_descriptor = phrase
+                if phrase.endswith('ed') and preparation == '':
+                    preparation = phrase
+
             
         ingredient_obj = {}
         ingredient_obj['name'] = name_ingr
@@ -80,6 +92,7 @@ def fetch_recipe(url):
         ingredient_obj['quantity'] = quantity
         ingredient_obj['measurement'] = measurement
         ingredient_obj['preparation'] = preparation
+        ingredient_obj['prep_descriptor'] = prep_descriptor
 
         ingredients.append(ingredient_obj)
 
@@ -141,6 +154,7 @@ def fetch_recipe(url):
     #     print ingr['quantity']
     #     print ingr['measurement']
     #     print ingr['preparation']
+    #     print ingr['prep_descriptor']
     #     print
     # print 'INSTRUCTIONS'
     # for instruct in instruction_list:

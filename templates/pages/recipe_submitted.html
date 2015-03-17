@@ -1,0 +1,52 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="row col-lg-12">
+	<h1>Recipe Transformer</h1>
+	<h3>Recipe URL: <a href="{{ context.recipe_url }}">{{ context.recipe_url }}</a></h3>
+</div>
+<div class="row col-lg-6">
+	<h3 class="text-center">Original Recipe</h3>
+	<h4 class="text-center">{{ context.recipe_name }}</h4>
+	<p class="col-lg-4 text-center">Prep Time: {{ context.prep_time }} minutes</p>
+	<p class="col-lg-4 text-center">Cook Time: {{ context.cook_time }} minutes</p>
+	<p class="col-lg-4 text-center">Total Time: {{ context.total_time }} minutes</p>
+	
+	<h4 class="text-center">Ingredients</h4>
+	<div class="col-lg-12">
+	{% for ingr in context.ingredients %}
+		{% if ingr.descriptor != '' and ingr.preparation != '' and ingr.prep_descriptor != '' %}
+		<p>{{ ingr.descriptor }} {{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }} ({{ ingr.prep_descriptor }} {{ ingr.preparation }})
+		</p>
+		{% elif ingr.descriptor != '' and ingr.preparation != '' %}
+		<p>{{ ingr.descriptor }} {{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }} ({{ ingr.preparation }})</p>
+		{% elif ingr.preparation != '' %}
+		<p>{{ ingr.descriptor }} {{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }} ({{ ingr.preparation }})</p>
+		{% elif ingr.preparation != '' and ingr.prep_descriptor != '' %}
+		<p>{{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }} ({{ ingr.prep_descriptor }} {{ ingr.preparation }})
+		</p>
+		{% elif ingr.descriptor != ''%}
+		<p>{{ ingr.descriptor }} {{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }}</p>
+		{% else %}
+		<p>{{ ingr.name }} - {{ ingr.quantity }} {{ ingr.measurement }}
+		</p>
+		{% endif %}
+	{% endfor %}
+	</div>
+
+	<h4 class="text-center">Instructions</h4>
+	<div class="lg-col-12">
+		<ol>
+		{% for instruct in context.instructions %}
+			<li>{{ instruct.text }}</li>
+		{% endfor %}
+		</ol>
+	</div>
+
+</div>
+<div class="row col-lg-6">
+	<h3 class="text-center">Transformation Options</h3>
+</div>
+
+{% endblock %}

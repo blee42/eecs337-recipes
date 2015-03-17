@@ -37,6 +37,19 @@ def home():
         context['loaded'] = mongo.db.kb.count()
         return render_template('pages/loading.html', context=context)
 
+@app.route('/', methods=['POST'])
+def home_post():
+    context = {}
+    recipe_url = request.form['recipe_url']
+    parsed_recipe = recipe.fetch_recipe(recipe_url)
+    context['recipe_name'] = parsed_recipe['recipe_name']
+    context['recipe_url'] = recipe_url
+    context['prep_time'] = parsed_recipe['prep_time']
+    context['cook_time'] = parsed_recipe['cook_time']
+    context['total_time'] = parsed_recipe['total_time']
+    context['ingredients'] = parsed_recipe['ingredients']
+    context['instructions'] = parsed_recipe['instructions']
+    return render_template('pages/recipe_submitted.html', context=context)
 
 @app.route('/about')
 def about():
