@@ -2,7 +2,7 @@
 
 Project by Kevin Chen, Brittany Lee, Kevin Broh-Kahn, and Bhavita Jaiswal!
 
-This project is built off of a Flask boilerplate - [https://github.com/mjhea0/flask-boilerplate/](https://github.com/mjhea0/flask-boilerplate)
+This project is built off of a Flask boilerplate - [https://github.com/mjhea0/flask-boilerplate/](https://github.com/mjhea0/flask-boilerplate). Built and tested with Mongo 2.6.4 and Python 2.7.6.
 
 ## Quick Start
 1. Clone the repo
@@ -22,7 +22,7 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
   $ pip install -r requirements.txt
   ```
 
-4. Install MongoDB
+4. Install & start MongoDB (see below)
 
 4. Run the development server:
   ```shell
@@ -32,7 +32,7 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 5. Navigate to [http://localhost:5000](http://localhost:5000)
 
 ## Starting MongoDB
-1. Have MongoDB installed and Flask PyMongo installed via PIP (TODO: add to README).
+1. Have MongoDB and Flask PyMongo installed (the latter should be installed if you did `pip install` above.
 2. Make the `data/db` folder.
   ```shell
   $ mkdir data/db
@@ -47,32 +47,14 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 
 ## Populating the DB initially
 
-`populate_kb.py` contains code for generating our knowledge base by populating the database with some 2043 entries.
-Just run `run()` and it should do the right thing. This will take ~10 mins. Running the Flask server itself will have a similar effect, in addition to checks that rerun specific bits as necessary.
+The first you start the server will require populate the knowledge base with a couple thousand entries, so sit tight.
+
+`populate_kb.py` contains this code feel free to also just run `run()` -- this'll also clear the KB, so if it glitches out or something, just rerun it here.
 
 example data:
 ```JSON
 {
-  "_id" : ObjectId("5507cca29547e66a6a1bb445"),
-  "name" : "abiu",
-  "substitutes" : [
-    "cherimoya",
-    "any fresh tropical fruit"
-  ],
-  "diet_descriptor" : [
-    "vegan",
-    "vegetarian",
-    "pescatarian",
-    "lactose-free"
-  ],
-  "healthy_descriptor" : null,
-  "summary" : "(pouteria caimito) a tropical fruit with caramel flavored flesh. the fruit is typically eaten fresh and slightly chilled. eat only the soft \"jelly like\" fruit and don't scrape too close to the skin which exudes an unpleasant milk substance. the fruit can also be scooped out and tossed lightly with lemon juice to retard browning then used in a fresh fruit salad.",
-  "web_taxonomy" : "tropical fruits",
-  "type" : "fruit",
-  "composition" : "solid"
-}
-{
-  "_id" : ObjectId("5507cca29547e66a6a1bb447"),
+  "_id" : "5507cca29547e66a6a1bb447",
   "substitutes" : [
     "champagne grapes",
     "other small grapes"
@@ -136,11 +118,4 @@ example data:
   "composition" : "solid"
 }
 ```
-
-## Inserting / Finding / etc. with MongoDB.
-Just do everything in `kb.py`. Standard Mongo stuff -- `kb.insert()`, `kb.find()`, etc. Read the docs.
-
-## todo
- * plural words
- * two transformations
 
