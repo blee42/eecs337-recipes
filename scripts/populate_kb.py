@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 from threading import Thread
-from kb import Type, Composition
 from time import sleep
 
 import sys

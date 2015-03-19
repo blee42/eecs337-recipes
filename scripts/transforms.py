@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from enum import Enum
 
 import re
 
