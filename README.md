@@ -63,7 +63,7 @@ An example representation of an ingredient in our KB is displayed below. The bas
   "_id" : "5507cca29547e66a6a1bb447",
   "name" : "baby kiwi",
   "type" : "fruit",
-  "composition" : "solid"
+  "composition" : "solid",
   "healthy_descriptor" : [
     "low-carb",
     "low-sodium",
@@ -76,7 +76,7 @@ An example representation of an ingredient in our KB is displayed below. The bas
     "pescatarian",
     "lactose-free"
   ],
-  "cuisine_descriptor": []
+  "cuisine_descriptor": [],
   "substitutes" : [
     "champagne grapes",
     "other small grapes"
