@@ -51,15 +51,37 @@ The first you start the server will require populate the knowledge base with a c
 
 `populate_kb.py` contains this code feel free to also just run `run()` -- this'll also clear the KB, so if it glitches out or something, just rerun it here.
 
-example data:
+## Recipe Representation
+
+## Ingredient Representation
+
+An example representation of an ingredient in our KB is displayed below. The basic data (name, substitutes, nutrients, summary) is scrapped from gourmetsleuth.com. We parse through this information to identify a type, composition, and various descriptors. Transformations take an ingredient name from the recipe, find its closest match in KB, evaluate if it's suitable for the desired type of recipe, and replace it with either an appropriate substitute or finds another item in the same food category and same composition (e.g. we wouldn't want a sauce to replace meat) that's also appropriate for that recipe.
+
+### Example
 ```JSON
 {
   "_id" : "5507cca29547e66a6a1bb447",
+  "name" : "baby kiwi",
+  "type" : "fruit",
+  "composition" : "solid"
+  "healthy_descriptor" : [
+    "low-carb",
+    "low-sodium",
+    "low-calorie",
+    "low-fat"
+  ],
+  "diet_descriptor" : [
+    "vegan",
+    "vegetarian",
+    "pescatarian",
+    "lactose-free"
+  ],
+  "cuisine_descriptor": []
   "substitutes" : [
     "champagne grapes",
     "other small grapes"
   ],
-  "name" : "baby kiwi",
+
   "nutrients" : {
     "total fat" : [
       "1g",
@@ -105,17 +127,8 @@ example data:
       "0%"
     ]
   },
-  "healthy_descriptor" : null,
   "summary" : "a vine (actinidia ",
   "web_taxonomy" : "berries",
-  "diet_descriptor" : [
-    "vegan",
-    "vegetarian",
-    "pescatarian",
-    "lactose-free"
-  ],
-  "type" : "fruit",
-  "composition" : "solid"
 }
 ```
 
