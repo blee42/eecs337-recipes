@@ -64,9 +64,9 @@ def home_post():
     elif health_transform == '2':
         # low sodium
         return recipe_submitted(recipe_url, '', 'low-sodium', '')
-    # elif health_transform == '3':
-    #     # low carb
-    #     return recipe_submitted(recipe_url, '', 'low_carb', '')
+    elif health_transform == '3':
+        # low carb
+        return recipe_submitted(recipe_url, '', 'low-carb', '')
     # elif cuisine_transform == '0':
     #     # chinese
     #     return recipe_submitted(recipe_url, '', '', 'chinese')

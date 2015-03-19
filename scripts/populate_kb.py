@@ -177,6 +177,7 @@ def refine_kb_entries():
         ingredient['composition'] = get_composition(ingredient)
         ingredient['diet_descriptor'] = get_diet_descriptors(ingredient)
         ingredient['healthy_descriptor'] = get_healthy_descriptors(ingredient)
+        ingredient['cuisine_descriptor'] = get_cuisine_descriptors(ingredient)
 
         ingredient['substitutes'] = fix_substitutes(ingredient['substring'])
         kb.save(ingredient)
@@ -249,7 +250,16 @@ def get_healthy_descriptors(ingredient):
                 descriptors.append(descriptor)
         return descriptors
     else:
-        return ['low-sodium', 'low-fat', 'low-calorie']
+        return ['low-sodium', 'low-fat', 'low-calorie', 'low-carb']
+
+def get_cuisine_descriptors(ingredient):
+    descriptors = []
+    for descriptor, keywords in ethnicity_capturer.iteritems():
+        for keyword in keywords:
+            if keyword in ingredient['summary'] or keyword in ingredient['name']:
+                descriptors.append(descriptor)
+    return descriptors
+
 
 def fix_substitutes(sub_string):
     new_string = re.sub('\(.*\)', '', sub_string)
@@ -460,5 +470,59 @@ healthy_converter = {
     'low-sodium': lambda x: (float(x['sodium'][1].strip('%')) < 10),
     'low-fat': lambda x: (float(x['saturated fat'][1].strip('%')) < 5 and \
         float(x['total fat'][1].strip('%')) < 10),
-    'low-calorie': lambda x:(float(x['calories'][0]) < 400)
+    'low-calorie': lambda x:(float(x['calories'][0]) < 400),
+    'low-carb': lambda x:(float(x['total carbohydrate'][1].strip('%')) < 15)
 }
+
+ethnicity_capturer = {
+    'asian': [
+        'china',
+        'asian',
+        'chinese',
+        'oriental',
+        'japan',
+        'korea',
+        'soy sauce',
+        'teriyaki'
+    ],
+    'western': [
+        'english',
+        'french',
+        'america',
+        'british',
+        'britain',
+        'u.s.',
+        'u.s.a.',
+        'u.k.',
+        'europe',
+        'continental',
+        'a1',
+    ],
+    'italian': [
+        'butter',
+        'tomato sauce',
+        'italy',
+        'italian',
+        'alfredo'
+    ],
+    'latin': [
+        'mexico',
+        'mexican',
+        'latin',
+        'taco',
+        'cilantro',
+        'beans',
+        'chipotle',
+        'avocado',
+    ],
+    'indian': [
+        'curry',
+        'india',
+        'indian',
+        'south asia',
+    ]
+}
+
+
+
+

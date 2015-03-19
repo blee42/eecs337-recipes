@@ -6,6 +6,7 @@ import re
 db = MongoClient().app
 kb = db.kb
 
+### EXAMPLES ###
 def insert_fixtures():
     if kb.count() == 0:
         examples = [
@@ -43,6 +44,8 @@ example_recipe = {
     ]
 }
 
+
+### ACTUAL ###
 def fuzzy_search_for_ingredient(name):
     attempt = kb.find_one({'name': name})
     if attempt:
@@ -122,7 +125,7 @@ def find_best_diet_replacement(kb_ingredient, diet, replacement_ingredients):
     return kb.find_one({'name': {'$nin': replacement_ingredients}, \
         'type': kb_ingredient['type'], 'diet_descriptor': diet, 'composition': kb_ingredient['composition']})
 
-# pretty identical to above
+# pretty similar to above
 def transform_healthiness(recipe, healthy):
     replacement_ingredients = []
     for ingredient in recipe['ingredients']:
@@ -154,7 +157,38 @@ def find_best_healthy_replacement(kb_ingredient, healthy, replacement_ingredient
     return kb.find_one({'name': {'$nin': replacement_ingredients}, \
         'type': kb_ingredient['type'], 'healthy_descriptor': healthy, 'composition': kb_ingredient['composition']})
 
-## DISCARDING?
+def transform_cuisine(recipe, cuisine):
+    replacement_ingredients = []
+    for ingredient in recipe['ingredients']:
+        kb_ingredient = fuzzy_search_for_ingredient(ingredient['name'].lower())
+        if kb_ingredient and not kb_ingredient['cuisine_descriptor'] is None:
+            if cuisine in kb_ingredient['cuisine_descriptor']:
+                replacement_ingredients.append(ingredient['name'])
+            else:
+                added = False
+                for substitute in kb_ingredient['substitutes']:
+                    sub_item = fuzzy_search_for_ingredient(substitute)
+                    if sub_item and cuisine in sub_item['cuisine_descriptor']:
+                        replacement_ingredients.append(sub_item['name'])
+                        added = True
+                        break
+
+                if not added:
+                    rand_ingredient = find_best_cuisine_replacement(kb_ingredient, cuisine, replacement_ingredients)
+                    replacement_ingredients.append(rand_ingredient['name'])
+                    added = True
+        else:
+            replacement_ingredients.append(ingredient['name'])
+
+    return replacement_ingredients
+
+def find_best_cuisine_replacement(kb_ingredient, cuisine, replacement_ingredients):
+    # options = kb.find({'type': kb_ingredient['type'], 'diet_descriptor': diet, 'composition': kb_ingredient['composition']})
+    # for i in options:
+    return kb.find_one({'name': {'$nin': replacement_ingredients}, \
+        'type': kb_ingredient['type'], 'cuisine_descriptor': cuisine, 'composition': kb_ingredient['composition']})
+
+### DISCARDING ###
 
 # not sure what this does?
 # def transform_to_vegan(recipe, ingredient_list):
