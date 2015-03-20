@@ -40,44 +40,51 @@ def home():
 @app.route('/', methods=['POST'])
 def home_post():
     recipe_url = request.form['recipe_url']
-    diet_transform = request.form['diet_transform']
-    health_transform = request.form['health_transform']
+    transforms = request.form['transform']
+    # health_transform = request.form['health_transform']
     # cuisine_transform = request.form['cuisine_transform']
-    if diet_transform == '0':
+    if transforms == '0':
         # pescatarian
         return recipe_submitted(recipe_url, 'pescatarian')
-    elif diet_transform == '1':
+    elif transforms == '1':
         # vegetarian
         return recipe_submitted(recipe_url, 'vegetarian')
-    elif diet_transform == '2':
+    elif transforms == '2':
         # vegan
         return recipe_submitted(recipe_url, 'vegan')
-    elif diet_transform == '3':
+    elif transforms == '3':
         # lactose-free
         return recipe_submitted(recipe_url, 'lactose-free')
-    elif health_transform == '0':
+    elif transforms == '4':
         # low calorie
         return recipe_submitted(recipe_url, '', 'low-calorie', '')
-    elif health_transform == '1':
+    elif transforms == '5':
         # low fat
         return recipe_submitted(recipe_url, '', 'low-fat', '')
-    elif health_transform == '2':
+    elif transforms == '6':
         # low sodium
         return recipe_submitted(recipe_url, '', 'low-sodium', '')
-    elif health_transform == '3':
+    elif transforms == '7':
         # low carb
         return recipe_submitted(recipe_url, '', 'low-carb', '')
-    # elif cuisine_transform == '0':
-    #     # chinese
-    #     return recipe_submitted(recipe_url, '', '', 'chinese')
-    # elif cuisine_transform == '1':
-    #     # mexican
-    #     return recipe_submitted(recipe_url, '', '', 'mexican')
+    elif transforms == '8':
+        # asian
+        return recipe_submitted(recipe_url, '', '', 'asian')
+    elif transforms == '9':
+        # western
+        return recipe_submitted(recipe_url, '', '', 'western')
+    elif transforms == '10':
+        return recipe_submitted(recipe_url, '', '', 'italian')
+    elif transforms == '11':
+        return recipe_submitted(recipe_url, '', '', 'latin')
+    elif transforms == '12':
+        return recipe_submitted(recipe_url, '', '', 'indian')
+    
     else:
-        return recipe_submitted(recipe_url, '')
+        return recipe_submitted(recipe_url, '', '', '')
 
 @app.route('/recipe_submitted', methods=['POST'])
-def recipe_submitted(url, diet, health):
+def recipe_submitted(url, diet, health, cuisine):
     context = {}
     parsed_recipe = recipe.fetch_recipe(url)
     context['recipe_name'] = parsed_recipe['recipe_name']
@@ -98,8 +105,9 @@ def recipe_submitted(url, diet, health):
     if health != '':
         context['transformed_recipe'] = transforms.transform_to_healthy(parsed_recipe, diet)
         context['transformation'] = health
-    # if cuisine != '':
-    #     context['transformation'] = cuisine
+    if cuisine != '':
+        context['transformed_recipe'] = transforms.transform_cuisine(parsed_recipe, cuisine)
+        context['transformation'] = cuisine
     else:
         context['transformed_recipe'] = 'Not available'
         context['transformation'] = ''

@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 url = 'http://allrecipes.com/Recipe/Chef-Johns-Pasta-Primavera/Detail.aspx?evt19=1&referringHubId=95'
 url_2 = 'http://allrecipes.com/Recipe/Pork-Roast-with-Sauerkraut-and-Kielbasa/Detail.aspx?evt19=1&referringHubId=1202'
-url_3 = ''
+url_3 = 'http://allrecipes.com/Recipe/Delicious-Ham-and-Potato-Soup/Detail.aspx?soid=recs_recipe_1'
 
 cooking_tools = ['spoon', 'cup', 'bowl', 'cutting board', 'knife', 'peeler', 'colander', 'strainer', 'grater', 'can opener', 'saucepan', 'frying pan', 'pan', 'baking dish', 'blender', 'spatula', 'tongs', 'garlic press', 'ladle', 'ricer', 'pot holder', 'rolling pin', 'scissors', 'whisk', 'skillet', 'wok', 'baking sheet', 'casserole dish', 'pot', 'slow cooker']
 cooking_methods = ['peel', 'grate', 'cut', 'slice', 'sieve', 'knead', 'break', 'boil', 'crack', 'fry', 'scramble', 'stir', 'add', 'bake', 'saute', 'simmer', 'pour', 'chop', 'blend', 'brown', 'carmelise', 'beat', 'dice', 'melt', 'poach', 'toss', 'roast']
@@ -53,6 +53,35 @@ def fetch_recipe(url):
                 quantity = amount_string[0]
                 measurement = ''
 
+        # name_string = name_string.replace(',','')
+        # name_string = name_string.split()
+
+        # name_ingr = ''
+        # preparation = ''
+        # prep_descriptor = ''
+        # descriptor = ''
+        # tagged_name = nltk.pos_tag(name_string)
+        # print tagged_name
+        # for tags in tagged_name:
+        #     if 'NN' in tags[1]:
+        #         if name_ingr == '':
+        #             name_ingr = tags[0]
+        #         else:
+        #             name_ingr = name_ingr + ' ' + tags[0]
+        #         print name_ingr
+        #     if tags[0].endswith('ed'):
+        #         preparation = tags[0]
+        #         print preparation
+        #     elif tags[0].endswith('ly'):
+        #         prep_descriptor = tags[0]
+        #         print prep_descriptor
+        #     elif tags[1] == 'VBD' or tags[1] == 'JJ':
+        #         descriptor = tags[0]
+        #         print descriptor
+
+
+
+
         name_string = name_string.split(',')
         ingredient_name = name_string[0]
         del name_string[0]
@@ -74,6 +103,9 @@ def fetch_recipe(url):
         else:
             name_ingr = ingredient_name[0]
 
+        if descriptor.endswith('ly'):
+            prep_descriptor = descriptor
+            descriptor = ''
         if descriptor.endswith('ed'):
             preparation = descriptor
             descriptor = ''
