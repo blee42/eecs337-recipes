@@ -45,16 +45,16 @@ def home_post():
     # cuisine_transform = request.form['cuisine_transform']
     if transforms == '0':
         # pescatarian
-        return recipe_submitted(recipe_url, 'pescatarian')
+        return recipe_submitted(recipe_url, 'pescatarian', '', '')
     elif transforms == '1':
         # vegetarian
-        return recipe_submitted(recipe_url, 'vegetarian')
+        return recipe_submitted(recipe_url, 'vegetarian', '', '')
     elif transforms == '2':
         # vegan
-        return recipe_submitted(recipe_url, 'vegan')
+        return recipe_submitted(recipe_url, 'vegan', '', '')
     elif transforms == '3':
         # lactose-free
-        return recipe_submitted(recipe_url, 'lactose-free')
+        return recipe_submitted(recipe_url, 'lactose-free', '', '')
     elif transforms == '4':
         # low calorie
         return recipe_submitted(recipe_url, '', 'low-calorie', '')
@@ -79,9 +79,6 @@ def home_post():
         return recipe_submitted(recipe_url, '', '', 'latin')
     elif transforms == '12':
         return recipe_submitted(recipe_url, '', '', 'indian')
-    
-    else:
-        return recipe_submitted(recipe_url, '', '', '')
 
 @app.route('/recipe_submitted', methods=['POST'])
 def recipe_submitted(url, diet, health, cuisine):
@@ -103,14 +100,14 @@ def recipe_submitted(url, diet, health, cuisine):
         context['transformed_recipe'] = transformed_recipe
         context['transformation'] = diet
     if health != '':
-        context['transformed_recipe'] = transforms.transform_to_healthy(parsed_recipe, diet)
+        context['transformed_recipe'] = transforms.transform_healthiness(parsed_recipe, diet)
         context['transformation'] = health
     if cuisine != '':
         context['transformed_recipe'] = transforms.transform_cuisine(parsed_recipe, cuisine)
         context['transformation'] = cuisine
-    else:
-        context['transformed_recipe'] = 'Not available'
-        context['transformation'] = ''
+    # else:
+    #     context['transformed_recipe'] = 'Not available'
+    #     context['transformation'] = ''
     return render_template('pages/recipe_submitted.html', context=context)
 
 @app.route('/about')

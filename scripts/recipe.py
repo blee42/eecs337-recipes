@@ -9,6 +9,7 @@ url_3 = 'http://allrecipes.com/Recipe/Delicious-Ham-and-Potato-Soup/Detail.aspx?
 
 cooking_tools = ['spoon', 'cup', 'bowl', 'cutting board', 'knife', 'peeler', 'colander', 'strainer', 'grater', 'can opener', 'saucepan', 'frying pan', 'pan', 'baking dish', 'blender', 'spatula', 'tongs', 'garlic press', 'ladle', 'ricer', 'pot holder', 'rolling pin', 'scissors', 'whisk', 'skillet', 'wok', 'baking sheet', 'casserole dish', 'pot', 'slow cooker']
 cooking_methods = ['peel', 'grate', 'cut', 'slice', 'sieve', 'knead', 'break', 'boil', 'crack', 'fry', 'scramble', 'stir', 'add', 'bake', 'saute', 'simmer', 'pour', 'chop', 'blend', 'brown', 'carmelise', 'beat', 'dice', 'melt', 'poach', 'toss', 'roast']
+cooking_methods_temp = ['boil', 'fry', 'scramble', 'bake', 'saute', 'simmer', 'brown', 'carmelise', 'melt', 'poach', 'roast']
 
 def fetch_recipe(url):
     html = urllib2.urlopen(url).read()
@@ -177,8 +178,12 @@ def fetch_recipe(url):
 
         # check for max time step
         if step_obj['time'] > max_time:
-            max_time = step_obj['time']
-            max_time_method = step_obj['methods']
+            methods = step_obj['methods'].split(',')
+            print methods
+            print cooking_methods_temp
+            if methods[0] in cooking_methods_temp:
+                max_time = step_obj['time']
+                max_time_method = methods[0]
 
 
         instruction_list.append(step_obj)

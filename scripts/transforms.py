@@ -143,8 +143,9 @@ def transform_healthiness(recipe, healthy):
 
                 if not added:
                     rand_ingredient = find_best_healthy_replacement(kb_ingredient, healthy, replacement_ingredients)
-                    replacement_ingredients.append(rand_ingredient['name'])
-                    added = True
+                    if rand_ingredient:
+                        replacement_ingredients.append(rand_ingredient['name'])
+                        added = True
         else:
             replacement_ingredients.append(ingredient['name'])
 
