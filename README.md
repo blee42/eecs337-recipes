@@ -53,6 +53,8 @@ The first you start the server will require populate the knowledge base with a c
 
 ## Recipe Representation
 
+We used the same representation used by the autograder for our recipes.  We parsed the recipe into ingredients, tools, and cooking methods.  We also extended this to parse each step of the recipe.  There may be slight inaccuracies with our parser since it does not seem to perform well against the autograder, but does provide reasonable results when reading the actual parse result.
+
 ## Ingredient Representation
 
 An example representation of an ingredient in our KB is displayed below. The basic data (name, substitutes, nutrients, summary) is scrapped from gourmetsleuth.com. We parse through this information to identify a type, composition, and various descriptors. Transformations take an ingredient name from the recipe, find its closest match in KB, evaluate if it's suitable for the desired type of recipe, and replace it with either an appropriate substitute or finds another item in the same food category and same composition (e.g. we wouldn't want a sauce to replace meat) that's also appropriate for that recipe.
