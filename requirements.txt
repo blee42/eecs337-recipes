@@ -17,3 +17,4 @@ nltk==3.0
 Flask-PyMongo==0.3.0
 numpy
 enum34
+pymongo==2.7

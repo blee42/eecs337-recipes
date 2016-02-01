@@ -1,5 +1,7 @@
 # Recipe Transformer
 
+This project was hardcoded to take recipes from an older version of AllRecipes.com. The recipe parser (recipe.py) will need to be changed to accept different types of url input.
+
 Project by Kevin Chen, Brittany Lee, Kevin Broh-Kahn, and Bhavita Jaiswal!
 
 This project is built off of a Flask boilerplate - [https://github.com/mjhea0/flask-boilerplate/](https://github.com/mjhea0/flask-boilerplate). Built and tested with Mongo 2.6.4 and Python 2.7.6.
